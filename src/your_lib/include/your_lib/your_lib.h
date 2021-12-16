@@ -1,8 +1,6 @@
 #ifndef ABDFA2BC_B3C6_4AC3_ACE5_B074B2582347
 #define ABDFA2BC_B3C6_4AC3_ACE5_B074B2582347
 
-#define LIB_TEMPLATE_CMAKE_H
-
 /**
  * \ingroup your_lib_namespace
  *
@@ -67,8 +65,5 @@ public:
 
 
 } // namespace your_lib
-
-#endif /* LIB_TEMPLATE_CMAKE_H */
-
 
 #endif /* ABDFA2BC_B3C6_4AC3_ACE5_B074B2582347 */

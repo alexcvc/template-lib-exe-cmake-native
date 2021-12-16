@@ -71,6 +71,10 @@ if (NOT CMAKE_CONFIGURATION_TYPES)
 endif ()
 
 ### Compile external.
+set(Doctest_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/doctest)
+set(Spdlog_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/spdlog/include)
+set(Fmt_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/fmt/include)
+
 add_subdirectory(external)
 
 ### Compile- and install-related commands.

@@ -1,7 +1,5 @@
 #ifndef B5987B1D_D0E2_445C_BBB7_A4089035AF6D
 #define B5987B1D_D0E2_445C_BBB7_A4089035AF6D
-#ifndef LIB_TEMPLATE_CMAKE_HEADER_ONLY_H
-#define LIB_TEMPLATE_CMAKE_HEADER_ONLY_H
 
 /**
  * \ingroup your_lib_namespace
@@ -36,4 +34,5 @@ DatumType sub(DatumType op1, DatumType op2)
 }
 
 } // namespace your_lib
+
 #endif /* B5987B1D_D0E2_445C_BBB7_A4089035AF6D */

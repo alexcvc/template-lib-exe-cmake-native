@@ -72,7 +72,7 @@ ctest -R -V your_test_name`.
 4. The documentation will be installed in `${CMAKE_INSTALL_PREFIX}/share/doc/${PROJECT_NAME}/html/`.
 5. You can adjust build and installation directories using the `DOXYGEN_BUILD_DIR` and `DOXYGEN_INSTALL_DIR`.
 
-# Licensing
+## Licensing
 
 1. Change file `LICENSE`
 2. Read to be sure:
