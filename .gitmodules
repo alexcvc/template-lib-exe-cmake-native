@@ -1,0 +1,12 @@
+[submodule "spdlog"]
+	path = external/spdlog
+	url = git@github.com:gabime/spdlog.git
+	branch = master
+[submodule "fmt"]
+	path = external/fmt
+	url = https://github.com/fmtlib/fmt.git
+	branch = master
+[submodule "doctest"]
+	path = external/doctest
+	url = https://github.com/onqtam/doctest.git
+	branch = master
