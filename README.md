@@ -1,14 +1,13 @@
 # Template of C++ project with library and executable
 
-The project template was inherited from another project and adapted for test applications in ARM. 
+The project template was inherited from another project and adapted for test applications in ARM.
 [https://github.com/robotology/how-to-export-cpp-library]()
-
 
 ## Build
 
 ```shell
-git clone https://github.com/alexcvc/template-lib-exe-cmake-normal.git 
-cd template-lib-exe-cmake-normal
+git clone https://github.com/alexcvc/template-lib-exe-cmake-normal.git <your_project_name> 
+cd <your_project_name>
 mkdir build && cd build
 cmake ..
 cmake --build .
@@ -20,10 +19,10 @@ cmake --build .
 (the name will be the one used for find_package() call)
 2. Change version information for <your_project_name>
 3. Add your library source files in the subdirectories
-    - src/<your_library_name>/include
-    - src/<your_library_name>/src
+    - src/<your_project_name>/include
+    - src/<your_project_name>/src
 4. Add your executable source files in the subdirectories
-    - src/<your_executable_name>
+    - src/<your_exe_name>
 5. Update src/CMakeLists.txt accordingly.
 6. Add the tests to your library in /test subdirectory and modify
    test/CMakeLists.txt accordingly.
@@ -38,9 +37,12 @@ sh setup.sh
 
 ## Test
 
+1. Adjust all test accordingly.
+2. Delete unneeded tests
+
 ### Add a test
 
-Use the template to add a test:
+Use the template to add a new test:
 
 ```cmake
 add_executable(YOUR_TEST_NAME_EXE your_test_source.cpp)
@@ -66,7 +68,7 @@ ctest -R -V your_test_name`.
 
 ## Generate documentation
 
-1. Check  that the Doxygen tool is installed.
+1. Check that the Doxygen tool is installed.
 2. Doxygen documentation will be generated using the `dox` target. See `doc/CMakeLists.txt` for details.
 3. Once generated, the doxygen documentation can be browsed at `build/doc/html/index.html`.
 4. The documentation will be installed in `${CMAKE_INSTALL_PREFIX}/share/doc/${PROJECT_NAME}/html/`.
@@ -74,8 +76,12 @@ ctest -R -V your_test_name`.
 
 ## Licensing
 
-1. Change file `LICENSE`
+1. Change a file `LICENSE`
 2. Read to be sure:
 
  - [Choose a license](http://choosealicense.com/)
  - [tl;drLegal](https://tldrlegal.com/)
+
+Enjoy!
+
+A.Sacharov

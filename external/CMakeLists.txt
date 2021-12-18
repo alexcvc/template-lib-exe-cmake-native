@@ -9,3 +9,5 @@
 add_subdirectory( doctest )
 add_subdirectory( fmt )
 add_subdirectory( spdlog )
+add_subdirectory( gsl )
+add_subdirectory( gsl-lite )

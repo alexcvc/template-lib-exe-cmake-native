@@ -10,3 +10,11 @@
 	path = external/doctest
 	url = https://github.com/onqtam/doctest.git
 	branch = master
+[submodule "gsl-lite"]
+	path = external/gsl-lite
+	url = git@github.com:gsl-lite/gsl-lite.git
+	branch = master
+[submodule "gsl"]
+	path = external/gsl
+	url = git@github.com:microsoft/GSL.git
+	branch = main

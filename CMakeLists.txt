@@ -74,6 +74,8 @@ endif ()
 set(Doctest_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/doctest)
 set(Spdlog_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/spdlog/include)
 set(Fmt_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/fmt/include)
+set(Gsl_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/gsl/include)
+set(GslLite_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/gsl-lite/include)
 
 add_subdirectory(external)
 
