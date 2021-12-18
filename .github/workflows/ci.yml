@@ -26,8 +26,6 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v2
-        with:
-            submodules: true
 
 #    - name: Create cmake build-directory
 #      run: cmake -E make_directory ${{github.workspace}}/build
