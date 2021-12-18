@@ -1,41 +1,86 @@
-name: C++ CI Workflow
+name: Build YourLib
 
-on: [push, pull_request]
+on: [push]
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Debug
+  DOXYGEN_WEBSITES_TARBALL: doxygenWebsites.tar.gz
+  DOXYGEN_WARN_FILE: DoxygenWarnings.log
+  DOXYGEN_WARN_ARTIFACT: DoxygenWarnings
+  DOXYGEN_WARN_TARBALL: DoxygenWarnings.tar
 
 jobs:
-  # Job that builds, configures, and tests the repository
   build:
-    name: '[${{ matrix.os }}@${{ matrix.build_type }}]'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        build_type: [Debug, Release]
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ubuntu-20.04
 
     steps:
-    # Clone the repository in $GITHUB_WORKSPACE
-    - uses: actions/checkout@master
-
-    # Note: we use bash also on Windows in order to have the same commands such
-    #       as cd, mkdir, etc in all OSs.
-
-    - name: Configure
-      shell: bash
+    - name: Install dependencies
       run: |
-        mkdir -p build
-        cd build    
-        cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} ..
+        sudo apt-get update && sudo apt-get install -yq cppcheck clang-tidy python3-pip doxygen graphviz
+        echo "${HOME}/.local/bin" >> $GITHUB_PATH
+        
+    - name: Checkout Source
+      uses: actions/checkout@v2
 
-    - name: Build
-      shell: bash
-      run: |
-        cd build
-        cmake --build . --config ${{ matrix.build_type }}
+    - name: Create cmake build-directory
+      run: cmake -E make_directory ${{github.workspace}}/build
 
-    - name: Test
-      shell: bash
+    - name: Setup cmake
+      working-directory: ${{github.workspace}}/build
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_DOC=ON -DRUN_CPPCHECK=ON -DRUN_CLANGTIDY=ON
+      env:
+        CLANGTIDY: clang-tidy
+
+    - name: Task Build
+      working-directory: ${{github.workspace}}/build
+      run: cmake --build . --config $BUILD_TYPE
+      env:
+        MAKEFLAGS: "-j2"
+
+    - name: Task Test
+      working-directory: ${{github.workspace}}/build/test
+      run: ctest --output-on-failure -C $BUILD_TYPE
+
+  documentation:
+    runs-on: ubuntu-20.04
+    needs: build
+    steps:
+    - name: Download doxygen warnings
+      uses: actions/download-artifact@v2
+      with:
+        name: ${{env.DOXYGEN_WARN_ARTIFACT}}
+        path: ${{github.workspace}}
+
+    - name: Extract files
+      working-directory: ${{github.workspace}}
+      run: tar -xf $DOXYGEN_WARN_TARBALL
+
+    - name: Number of warnings
+      working-directory: ${{github.workspace}}
       run: |
-        cd build
-        cmake -DBUILD_TESTING:BOOL=ON .
-        cmake --build . --config ${{ matrix.build_type }}
-        ctest --output-on-failure -C ${{ matrix.build_type }} .
+        echo -n "Number of Warnings: "
+        echo "$(grep -v "/test/" $DOXYGEN_WARN_FILE | wc -l)"
+        regex_pattern="Member (set|get|is|main|build|.*?\(variable\)|.*?\(typedef\)|.*?\(macro definition\)|.*?\(enumeration\)|.*?override|.*?=default|.*?=delete)(.*) is not documented|/test/"
+        cat $DOXYGEN_WARN_FILE | grep -Evi "${regex_pattern}" || true
+        if [[ $(cat $DOXYGEN_WARN_FILE | grep -Evi "${regex_pattern}" | wc -l) -gt 0 ]]; then echo "Warning threshold exceeded (> 0)!"; exit 1; fi
+
+  stylecheck:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Install dependencies
+      run: |
+        sudo apt-get update && sudo apt-get install -yq clang-format
+
+    - name: Checkout Source
+      uses: actions/checkout@v2
+
+    - name: Run stylecheck
+      working-directory: ${{github.workspace}}
+      run: make stylecheck
+      env:
+        CLANGFORMAT: clang-format
