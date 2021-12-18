@@ -30,60 +30,60 @@ jobs:
     - name: Checkout submodules
       run: git submodule update --init --recursive
 
-    - name: Create cmake build-directory
-      run: cmake -E make_directory ${{github.workspace}}/build
+#    - name: Create cmake build-directory
+#      run: cmake -E make_directory ${{github.workspace}}/build
+#
+#    - name: Setup cmake
+#      working-directory: ${{github.workspace}}/build
+#      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_DOC=ON -DRUN_CPPCHECK=ON -DRUN_CLANGTIDY=ON
+#      env:
+#        CLANGTIDY: clang-tidy
+#
+#    - name: Task Build
+#      working-directory: ${{github.workspace}}/build
+#      run: cmake --build . --config $BUILD_TYPE
+#      env:
+#        MAKEFLAGS: "-j2"
+#
+#    - name: Task Test
+#      working-directory: ${{github.workspace}}/build/test
+#      run: ctest --output-on-failure -C $BUILD_TYPE
 
-    - name: Setup cmake
-      working-directory: ${{github.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_DOC=ON -DRUN_CPPCHECK=ON -DRUN_CLANGTIDY=ON
-      env:
-        CLANGTIDY: clang-tidy
-
-    - name: Task Build
-      working-directory: ${{github.workspace}}/build
-      run: cmake --build . --config $BUILD_TYPE
-      env:
-        MAKEFLAGS: "-j2"
-
-    - name: Task Test
-      working-directory: ${{github.workspace}}/build/test
-      run: ctest --output-on-failure -C $BUILD_TYPE
-
-  documentation:
-    runs-on: ubuntu-20.04
-    needs: build
-    steps:
-    - name: Download doxygen warnings
-      uses: actions/download-artifact@v2
-      with:
-        name: ${{env.DOXYGEN_WARN_ARTIFACT}}
-        path: ${{github.workspace}}
-
-    - name: Extract files
-      working-directory: ${{github.workspace}}
-      run: tar -xf $DOXYGEN_WARN_TARBALL
-
-    - name: Number of warnings
-      working-directory: ${{github.workspace}}
-      run: |
-        echo -n "Number of Warnings: "
-        echo "$(grep -v "/test/" $DOXYGEN_WARN_FILE | wc -l)"
-        regex_pattern="Member (set|get|is|main|build|.*?\(variable\)|.*?\(typedef\)|.*?\(macro definition\)|.*?\(enumeration\)|.*?override|.*?=default|.*?=delete)(.*) is not documented|/test/"
-        cat $DOXYGEN_WARN_FILE | grep -Evi "${regex_pattern}" || true
-        if [[ $(cat $DOXYGEN_WARN_FILE | grep -Evi "${regex_pattern}" | wc -l) -gt 0 ]]; then echo "Warning threshold exceeded (> 0)!"; exit 1; fi
-
-  stylecheck:
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Install dependencies
-      run: |
-        sudo apt-get update && sudo apt-get install -yq clang-format
-
-    - name: Checkout Source
-      uses: actions/checkout@v2
-
-    - name: Run stylecheck
-      working-directory: ${{github.workspace}}
-      run: make stylecheck
-      env:
-        CLANGFORMAT: clang-format
+#  documentation:
+#    runs-on: ubuntu-20.04
+#    needs: build
+#    steps:
+#    - name: Download doxygen warnings
+#      uses: actions/download-artifact@v2
+#      with:
+#        name: ${{env.DOXYGEN_WARN_ARTIFACT}}
+#        path: ${{github.workspace}}
+#
+#    - name: Extract files
+#      working-directory: ${{github.workspace}}
+#      run: tar -xf $DOXYGEN_WARN_TARBALL
+#
+#    - name: Number of warnings
+#      working-directory: ${{github.workspace}}
+#      run: |
+#        echo -n "Number of Warnings: "
+#        echo "$(grep -v "/test/" $DOXYGEN_WARN_FILE | wc -l)"
+#        regex_pattern="Member (set|get|is|main|build|.*?\(variable\)|.*?\(typedef\)|.*?\(macro definition\)|.*?\(enumeration\)|.*?override|.*?=default|.*?=delete)(.*) is not documented|/test/"
+#        cat $DOXYGEN_WARN_FILE | grep -Evi "${regex_pattern}" || true
+#        if [[ $(cat $DOXYGEN_WARN_FILE | grep -Evi "${regex_pattern}" | wc -l) -gt 0 ]]; then echo "Warning threshold exceeded (> 0)!"; exit 1; fi
+#
+#  stylecheck:
+#    runs-on: ubuntu-20.04
+#    steps:
+#    - name: Install dependencies
+#      run: |
+#        sudo apt-get update && sudo apt-get install -yq clang-format
+#
+#    - name: Checkout Source
+#      uses: actions/checkout@v2
+#
+#    - name: Run stylecheck
+#      working-directory: ${{github.workspace}}
+#      run: make stylecheck
+#      env:
+#        CLANGFORMAT: clang-format
