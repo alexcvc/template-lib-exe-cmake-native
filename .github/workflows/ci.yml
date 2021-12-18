@@ -20,14 +20,14 @@ jobs:
 
     steps:
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -yq cppcheck clang-tidy python3-pip doxygen graphviz
+      run: |
+        sudo apt-get update && sudo apt-get install -yq cppcheck clang-tidy python3-pip doxygen graphviz
         echo "${HOME}/.local/bin" >> $GITHUB_PATH
 
     - name: Checkout repository
       uses: actions/checkout@v2
         with:
             submodules: true
-            token: ${{ GitHub@Action_1 }}
 
 #    - name: Create cmake build-directory
 #      run: cmake -E make_directory ${{github.workspace}}/build
