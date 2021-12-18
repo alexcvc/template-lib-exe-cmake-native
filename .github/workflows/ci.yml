@@ -25,10 +25,9 @@ jobs:
         echo "${HOME}/.local/bin" >> $GITHUB_PATH
 
     - name: Checkout repository
-    - uses: actions/checkout@v1
-       with:
-            submodules: true
-            token: ${{ secrets.CI_TOKEN }}
+      uses: actions/checkout@v2
+
+
 #    - name: Create cmake build-directory
 #      run: cmake -E make_directory ${{github.workspace}}/build
 #
